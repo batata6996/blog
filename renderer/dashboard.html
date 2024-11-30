@@ -38,7 +38,9 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+      display: flex;
+      align-items: center; /* Alinha itens verticalmente */
+      }
 
     header h1 {
       font-size: 1.8rem;
@@ -136,10 +138,12 @@
 
     .sidebar-left {
       left: 0;
+      width: 13%;
     }
 
     .sidebar-right {
       right: 0;
+      width: 16.5%;
     }
 
     .sidebar ul {
@@ -154,13 +158,16 @@
     .sidebar ul li a {
       display: flex;
       align-items: center;
-      padding: 10px;
+      padding: 0px 10px;
       border-radius: 8px;
       color: #0f1419;
       text-decoration: none;
       font-size: 1rem;
       font-weight: bold;
       transition: background-color 0.3s, color 0.3s;
+      text-align: center;
+      line-height: 1;
+      max-height: 50px;
     }
 
     .sidebar ul li a:hover {
@@ -187,6 +194,14 @@
       bottom: 0;
       width: 100%;
     }
+
+    .logo {
+      height: 50px; /* Ajuste conforme necessário */
+      width: auto; /* Mantém proporção da imagem */
+      margin-right: 10px; /* Espaço entre a logo e o título */
+      vertical-align: middle; /* Alinha com o texto ao lado */
+}
+
 
     /* Responsividade */
     @media (max-width: 768px) {
@@ -216,6 +231,7 @@
 </head>
 <body>
   <header>
+    <img src="Designer-removebg-preview.png" alt="Logo do site" class="logo">
     <h1>Código em Paralelo</h1>
     <nav>
       <ul>
