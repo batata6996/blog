@@ -13,43 +13,42 @@
       box-sizing: border-box;
     }
 
-    /* Configuração do layout principal */
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      color: #333;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f9f9;
+      color: #0f1419;
       min-height: 100vh;
+      position: relative;
     }
 
     .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    main {
-      flex: 1; /* Garante que o conteúdo principal ocupe o espaço restante */
-    }
-
-    /* Cabeçalho */
-    header {
-      background-color: #007BFF;
-      color: white;
-      padding: 20px 0;
-    }
-
-    header .container {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px); /* Subtrai o tamanho do header */
+    }
+
+    header {
+      background-color: #1da1f2;
+      color: white;
+      padding: 10px 20px;
+      height: 60px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     header h1 {
-      margin: 0;
-      font-size: 1.8em;
+      font-size: 1.8rem;
+    }
+
+    header nav {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     header nav ul {
@@ -58,129 +57,221 @@
     }
 
     header nav ul li {
-      margin-left: 20px;
+      margin-left: 15px;
     }
 
     header nav ul li a {
       color: white;
       text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: color 0.3s;
     }
 
-    header nav ul li a:hover,
-    header nav ul li a:focus {
-      text-decoration: underline;
+    header nav ul li a:hover {
+      color: #d8eefe;
     }
 
-    /* Layout principal */
-    main .container {
+    main {
+      position: absolute;
+      left: 20%;
+      width: 60%; /* Ajustado para caber entre as duas sidebars */
+      top: 80px; /* Espaço abaixo do header */
+      height: calc(100% - 100px); /* Altura ajustada ao footer */
+      overflow-y: auto;
+    }
+
+    .feed {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 20px;
-      margin: 20px 0;
-    }
-
-    .posts {
-      flex: 3;
-      min-width: 60%;
-    }
-
-    .sidebar {
-      flex: 1;
-      min-width: 35%;
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 5px;
     }
 
     .post {
-      background: #fff;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e1e8ed;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .post:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     .post h2 {
+      font-size: 1.5rem;
       margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .post p {
+      font-size: 1rem;
+      color: #657786;
     }
 
     .post a {
-      color: #007BFF;
+      color: #1da1f2;
       text-decoration: none;
+      font-weight: bold;
     }
 
-    .post a:hover,
-    .post a:focus {
+    .post a:hover {
       text-decoration: underline;
     }
 
-    /* Rodapé */
-    footer {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 5px 0;
-      margin-top: 20px;
+    .sidebar {
+      position: absolute;
+      top: 60px;
+      width: 15%;
+      height: calc(100% - 50px);
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e1e8ed;
+      padding: 20px;
+      overflow-y: auto;
     }
 
-    footer p {
-      margin: 0;
+    .sidebar-left {
+      left: 0;
+    }
+
+    .sidebar-right {
+      right: 0;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 10px;
+    }
+
+    .sidebar ul li a {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      color: #0f1419;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #f1f1f1;
+      color: #1da1f2;
+    }
+
+    .sidebar ul li a svg {
+      margin-right: 8px;
+      font-size: 1.2rem;
+    }
+
+    .sidebar ul li a.selected {
+      background-color: #e8f5fe;
+      color: #1da1f2;
+    }
+
+    footer {
+      background-color: #e1e8ed;
+      color: #657786;
+      text-align: center;
+      padding: 15px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      main, .sidebar {
+        position: relative;
+        width: calc(100% - 40px);
+        left: 20px;
+        height: auto;
+        margin-bottom: 20px;
+      }
+
+      .sidebar-left, .sidebar-right {
+        width: calc(100% - 40px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .post {
+        padding: 15px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Cabeçalho -->
   <header>
-    <div class="container">
-      <h1>Bem-vinda ao Meu Blog</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">Sobre</a></li>
-          <li><a href="login.html">Login</a></li>
-        </ul>
-      </nav>
-    </div>
+    <h1>Código em Paralelo</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">Sobre</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- Conteúdo Principal -->
-  <main>
-    <div class="container">
-      <section class="posts">
+  <div class="container">
+    <aside class="sidebar sidebar-left">
+      <h3>Menu</h3>
+      <ul>
+        <li><a href="#" class="selected"><svg>🏠</svg>Início</a></li>
+        <li><a href="#"><svg>🔍</svg>Explorar</a></li>
+        <li><a href="#"><svg>📺</svg>Inscrições</a></li>
+        <li><a href="#"><svg>📚</svg>Biblioteca</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section class="feed">
         <article class="post">
           <h2>Título do Post 1</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="#">Leia mais...</a></p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit <a href="#">Leia mais...</a></p>
         </article>
-
         <article class="post">
           <h2>Título do Post 2</h2>
           <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. <a href="#">Leia mais...</a></p>
         </article>
-
         <article class="post">
           <h2>Título do Post 3</h2>
           <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. <a href="#">Leia mais...</a></p>
         </article>
       </section>
+    </main>
 
-      <!-- Barra Lateral -->
-      <aside class="sidebar">
-        <h3>Sobre o Blog</h3>
-        <p>Este blog é um espaço para compartilhar ideias, dicas e experiências.</p>
-        <h3>Links Úteis</h3>
-        <ul>
-          <li><a href="register.html">Cadastre-se</a></li>
-          <li><a href="contact.html">Contato</a></li>
-        </ul>
-      </aside>
-    </div>
-  </main>
+    <aside class="sidebar sidebar-right">
+      <h3>Sobre o Blog</h3>
+      <p>Bem-vindo ao programação paralela! Aqui, nosso foco é descomplicar a programação paralela e ajudar você a aproveitar ao máximo o poder da computação moderna.
 
-  <!-- Rodapé -->
+        Vivemos em uma era onde os processadores têm múltiplos núcleos, mas muitos desenvolvedores ainda enfrentam desafios para explorar essa capacidade. Nosso objetivo é ensinar conceitos, compartilhar boas práticas e apresentar ferramentas que tornam o desenvolvimento paralelo mais acessível e eficiente.
+        
+        Se você é iniciante ou um desenvolvedor experiente buscando aprimorar suas habilidades, encontrará aqui tutoriais práticos, artigos técnicos, discussões sobre frameworks populares e estudos de caso do mundo real.
+        
+        Junte-se a nós para desvendar as complexidades da programação paralela e dominar técnicas que aceleram aplicações e criam soluções de alto desempenho.
+        
+        Vamos codar juntos - de forma paralela!
+        
+        </p>
+    </aside>
+  </div>
+
   <footer>
-    <div class="container">
-      <p>&copy; 2024 Meu Blog. Todos os direitos reservados.</p>
-    </div>
+    <p>&copy; 2024 Meu Blog. Todos os direitos reservados.</p>
   </footer>
 </body>
 </html>
