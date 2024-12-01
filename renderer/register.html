@@ -111,14 +111,11 @@
             const data = await response.json();
       
             if (response.ok) {
-              alert('Usuário cadastrado com sucesso!');
               window.location.href = 'login.html';
             } else {
-              alert(data.error || 'Erro ao cadastrar');
             }
           } catch (error) {
             console.error('Erro:', error);
-            alert('Erro no servidor');
           }
         });
       </script>      
