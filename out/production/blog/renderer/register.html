@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Blog</title>
+  <style>
+    /* Estilo base */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    p.switch-form {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    p.switch-form a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    p.switch-form a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>Registro</h2>
+      <form id="register-form">
+        <label for="register-name">Nome:</label>
+        <input type="text" id="register-name" placeholder="Digite seu nome" required>
+        
+        <label for="register-email">E-mail:</label>
+        <input type="email" id="register-email" placeholder="Digite seu e-mail" required>
+        
+        <label for="register-password">Senha:</label>
+        <input type="password" id="register-password" placeholder="Crie uma senha" required>
+      
+        <button type="submit">Cadastrar</button>
+        <p class="switch-form">Já tem uma conta? <a href="login.html">Entrar</a></p>
+      </form>
+      
+      <script>
+        document.getElementById('register-form').addEventListener('submit', async (event) => {
+          event.preventDefault();
+      
+          const name = document.getElementById('register-name').value;
+          const email = document.getElementById('register-email').value;
+          const password = document.getElementById('register-password').value;
+      
+          try {
+            const response = await fetch('http://localhost:3000/api/users/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email, password })
+            });
+      
+            const data = await response.json();
+      
+            if (response.ok) {
+              window.location.href = 'login.html';
+            } else {
+            }
+          } catch (error) {
+            console.error('Erro:', error);
+          }
+        });
+      </script>      
+    </div>
+  </div>
+</body>
+</html>
