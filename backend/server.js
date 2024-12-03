@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { registerUser, loginUser } = require('./controllers/users');
+const postRoutes = require('./routes/posts');
 require('dotenv').config();
 
 const app = express(); 
@@ -24,6 +25,7 @@ const userRoutes = require('./routes/users');
 app.use('/api/users', userRoutes); 
 app.post('/api/users/register', registerUser); 
 app.post('/api/users/login', loginUser);
+app.use('/api/posts', postRoutes);
 
 const PORT = 3000;
 app.listen(PORT, () => {

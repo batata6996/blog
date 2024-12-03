@@ -15,7 +15,7 @@ app.on('ready', () => {
         },
     });
 
-    mainWindow.loadFile(path.join(__dirname, 'renderer/login.html'));
+    mainWindow.loadFile(path.join(__dirname, 'renderer/dashboard.html'));
 });
 
 const { fork } = require('child_process');

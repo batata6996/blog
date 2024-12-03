@@ -245,9 +245,9 @@
 
     <main>
       <h1>Escrever Novo Post</h1>
-      <form>
-        <input type="text" placeholder="Título do Post" required>
-        <textarea placeholder="Escreva o conteúdo aqui..." required></textarea>
+      <form id="postForm">
+        <input type="text" id="title" placeholder="Título do Post" required>
+        <textarea id="content" placeholder="Escreva o conteúdo aqui..." required></textarea>
         <div>
           <button type="submit" class="save-btn">Salvar</button>
           <button type="button" class="cancel-btn" onclick="window.location.href='index.html'">Cancelar</button>
@@ -259,5 +259,34 @@
   <footer>
     <p>&copy; 2024 Meu Blog. Todos os direitos reservados.</p>
   </footer>
+
+  <script>
+    document.getElementById('postForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const userID = 1; // Substitua pelo ID real do usuário (obtenha pelo token JWT)
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+
+        try {
+            const response = await fetch('/api/posts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userID, title, content }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Post criado com sucesso!');
+                window.location.href = 'index.html';
+            } else {
+                alert(data.error || 'Erro ao criar o post.');
+            }
+        } catch (error) {
+            console.error('Erro ao enviar o post:', error);
+            alert('Erro ao criar o post.');
+        }
+    });
+  </script>
 </body>
 </html>
