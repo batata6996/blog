@@ -255,8 +255,7 @@
     <h1>Código em Paralelo</h1>
     <nav>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">Sobre</a></li>
+        <li><a href="dashboard.html">Home</a></li>
         <li><a href="login.html">Login</a></li>
       </ul>
     </nav>
@@ -317,17 +316,27 @@
   </footer>
 
   <script>
-    // Referências aos elementos
     const loginLink = document.querySelector('header nav ul li a[href="login.html"]');
     const modal = document.getElementById('login-modal');
-  
-    // Exibir o modal ao clicar no link "Login"
-    loginLink.addEventListener('click', function (event) {
-      event.preventDefault(); // Evita o redirecionamento
-      modal.style.display = 'flex'; // Mostra o modal
+
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn'); 
+      const loginLink = document.querySelector('header nav ul li a[href="login.html"]');
+      
+      if (isLoggedIn === 'true' && loginLink) {
+        loginLink.parentElement.style.display = 'none'; 
+      }
+    }
+    
+      loginLink.addEventListener('click', function (event) {
+      event.preventDefault(); 
+      modal.style.display = 'flex'; 
     });
-  
-    // Fechar o modal ao clicar fora dele
+
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
     window.addEventListener('click', function (event) {
       if (event.target === modal) {
         modal.style.display = 'none';
@@ -335,11 +344,12 @@
     });
 
     window.addEventListener('message', (event) => {
-    if (event.data === 'loginSuccess') {
-      closeModal();
-    }
-  });
+      if (event.data && event.data.type === 'loginSuccess') {
+        closeModal();
+      }
+    });
 
+    document.addEventListener('DOMContentLoaded', checkLoginStatus);
   </script>  
 </body>
 </html>

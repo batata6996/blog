@@ -14,7 +14,7 @@ app.on('ready', () => {
             nodeIntegration: false,
         },
     });
-
+    mainWindow.maximize()
     mainWindow.loadFile(path.join(__dirname, 'renderer/dashboard.html'));
 });
 

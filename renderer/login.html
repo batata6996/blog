@@ -110,15 +110,18 @@
               console.log('Login bem-sucedido!');
               window.localStorage.setItem('token', data.token);
       
-              window.parent.postMessage('loginSuccess', '*');
+              window.parent.postMessage({ type: 'loginSuccess' }, '*');
             } else {
               console.log('Erro no login:', data.message || 'Erro desconhecido');
+              alert(data.message || 'Erro no login');
             }
           } catch (error) {
             console.error('Erro ao tentar realizar o login:', error);
+            alert('Erro ao tentar realizar o login.');
           }
         });
       </script>
+      
     </div>
   </div>
 </body>

@@ -102,23 +102,51 @@
           const password = document.getElementById('register-password').value;
       
           try {
-            const response = await fetch('http://localhost:3000/api/users/register', {
+            // Passo 1: Registrar usuário
+            const registerResponse = await fetch('http://localhost:3000/api/users/register', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name, email, password })
+              body: JSON.stringify({ name, email, password }),
             });
       
-            const data = await response.json();
+            const registerData = await registerResponse.json();
       
-            if (response.ok) {
-              window.location.href = 'login.html';
-            } else {
+            if (!registerResponse.ok) {
+              console.error('Erro no registro:', registerData.message || 'Erro desconhecido no registro');
+              alert(registerData.message || 'Erro ao cadastrar usuário.');
+              return;
             }
+      
+            console.log('Registro bem-sucedido:', registerData);
+      
+            // Passo 2: Realizar login automático
+            const loginResponse = await fetch('http://localhost:3000/api/users/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password }),
+            });
+      
+            const loginData = await loginResponse.json();
+      
+            if (!loginResponse.ok) {
+              console.error('Erro no login automático:', loginData.message || 'Erro desconhecido no login');
+              alert(loginData.message || 'Erro ao realizar login automático.');
+              return;
+            }
+      
+            console.log('Login automático bem-sucedido:', loginData);
+      
+            // Salvar token de autenticação no localStorage
+            localStorage.setItem('authToken', loginData.token);
+      
+            window.parent.postMessage({ type: 'loginSuccess' }, '*');
           } catch (error) {
-            console.error('Erro:', error);
+            console.error('Erro inesperado:', error);
+            alert('Ocorreu um erro inesperado. Por favor, tente novamente.');
+
           }
         });
-      </script>      
+      </script>
     </div>
   </div>
 </body>
