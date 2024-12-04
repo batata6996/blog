@@ -256,7 +256,9 @@
     <nav>
       <ul>
         <li><a href="dashboard.html">Home</a></li>
-        <li><a href="login.html">Login</a></li>
+        <li><a id="admin-button" href="escrita.html" style="display: none;">Escrever Post</a></li>
+        <li><a id="login-button" href="login.html">Login</a></li>
+        <li><a id="logout-button" href="#">Logout</a></li>
       </ul>
     </nav>
   </header>
@@ -316,40 +318,50 @@
   </footer>
 
   <script>
-    const loginLink = document.querySelector('header nav ul li a[href="login.html"]');
-    const modal = document.getElementById('login-modal');
-
-    function checkLoginStatus() {
-      const isLoggedIn = localStorage.getItem('isLoggedIn'); 
-      const loginLink = document.querySelector('header nav ul li a[href="login.html"]');
-      
-      if (isLoggedIn === 'true' && loginLink) {
-        loginLink.parentElement.style.display = 'none'; 
+    document.addEventListener('DOMContentLoaded', function () {
+      const loginButton = document.getElementById('login-button');
+      const logoutButton = document.getElementById('logout-button');
+      const modal = document.getElementById('login-modal');
+  
+      function checkLoginStatus() {
+        const token = localStorage.getItem('token');
+        if (token) {
+          loginButton.style.display = 'none'; 
+          logoutButton.style.display = 'inline'; 
+        } else {
+          loginButton.style.display = 'inline'; 
+          logoutButton.style.display = 'none'; 
+        }
       }
-    }
-    
-      loginLink.addEventListener('click', function (event) {
-      event.preventDefault(); 
-      modal.style.display = 'flex'; 
+  
+
+      loginButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        modal.style.display = 'flex'; 
+      });
+  
+      window.addEventListener('click', function (event) {
+        if (event.target === modal) {
+          modal.style.display = 'none'; 
+        }
+      });
+  
+      window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'loginSuccess') {
+          localStorage.setItem('token', event.data.token); 
+          checkLoginStatus(); 
+          modal.style.display = 'none'; 
+        }
+      });
+  
+      logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token'); 
+        checkLoginStatus(); 
+      });
+  
+      checkLoginStatus();
     });
-
-    function closeModal() {
-      modal.style.display = 'none';
-    }
-
-    window.addEventListener('click', function (event) {
-      if (event.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
-
-    window.addEventListener('message', (event) => {
-      if (event.data && event.data.type === 'loginSuccess') {
-        closeModal();
-      }
-    });
-
-    document.addEventListener('DOMContentLoaded', checkLoginStatus);
-  </script>  
+  </script>
 </body>
 </html>
