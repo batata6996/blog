@@ -324,8 +324,8 @@
       const modal = document.getElementById('login-modal');
   
       function checkLoginStatus() {
-        const token = localStorage.getItem('token');
-        if (token) {
+        const authToken = localStorage.getItem('authToken');
+        if (authToken) {
           loginButton.style.display = 'none'; 
           logoutButton.style.display = 'inline'; 
         } else {
@@ -348,15 +348,14 @@
   
       window.addEventListener('message', (event) => {
         if (event.data && event.data.type === 'loginSuccess') {
-          localStorage.setItem('token', event.data.token); 
-          checkLoginStatus(); 
           modal.style.display = 'none'; 
+          checkLoginStatus(); 
         }
       });
   
       logoutButton.addEventListener('click', function (event) {
         event.preventDefault();
-        localStorage.removeItem('token'); 
+        localStorage.removeItem('authToken'); 
         checkLoginStatus(); 
       });
   

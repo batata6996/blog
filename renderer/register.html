@@ -94,56 +94,37 @@
       </form>
       
       <script>
+        import authenticateUser from './scripts/login.js';
+
         document.getElementById('register-form').addEventListener('submit', async (event) => {
           event.preventDefault();
-      
+
           const name = document.getElementById('register-name').value;
           const email = document.getElementById('register-email').value;
           const password = document.getElementById('register-password').value;
-      
+
           try {
-            // Passo 1: Registrar usuário
             const registerResponse = await fetch('http://localhost:3000/api/users/register', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ name, email, password }),
             });
-      
-            const registerData = await registerResponse.json();
-      
-            if (!registerResponse.ok) {
-              console.error('Erro no registro:', registerData.message || 'Erro desconhecido no registro');
-              alert(registerData.message || 'Erro ao cadastrar usuário.');
-              return;
-            }
-      
-            console.log('Registro bem-sucedido:', registerData);
-      
-            // Passo 2: Realizar login automático
-            const loginResponse = await fetch('http://localhost:3000/api/users/login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, password }),
-            });
-      
-            const loginData = await loginResponse.json();
-      
-            if (!loginResponse.ok) {
-              console.error('Erro no login automático:', loginData.message || 'Erro desconhecido no login');
-              alert(loginData.message || 'Erro ao realizar login automático.');
-              return;
-            }
-      
-            console.log('Login automático bem-sucedido:', loginData);
-      
-            // Salvar token de autenticação no localStorage
-            localStorage.setItem('authToken', loginData.token);
-      
-            window.parent.postMessage({ type: 'loginSuccess' }, '*');
-          } catch (error) {
-            console.error('Erro inesperado:', error);
-            alert('Ocorreu um erro inesperado. Por favor, tente novamente.');
 
+            const registerData = await registerResponse.json();
+
+            if (!registerResponse.ok) {
+              throw new Error(registerData.message || 'Erro ao cadastrar usuário.');
+            }
+
+            console.log('Registro bem-sucedido:', registerData);
+
+            // Login automático usando a função reutilizável
+            await authenticateUser(email, password);
+
+            // Redirecionar ou realizar outra ação após o login automático
+            window.location.href = '/home.html';
+          } catch (error) {
+            console.error('Erro no registro:', error.message);
           }
         });
       </script>

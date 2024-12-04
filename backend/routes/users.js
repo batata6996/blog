@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
 
         if (rows.length === 0) {
             console.log('No user found with the provided email.');
-            return res.json({ success: false, message: 'User not found' }); 
+            return res.status(404).json({ success: false, message: 'Usuário não encontrado!' });
         }
 
         const user = rows[0];
@@ -25,19 +25,23 @@ router.post('/login', async (req, res) => {
 
         if (!validPassword) {
             console.log('Invalid password provided.');
-            return res.json({ success: false, message: 'Invalid password' });
+            return res.status(401).json({ success: false, message: 'Senha incorreta!' });
         }
 
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
-        });
+        const token = jwt.sign(
+            { id: user.UserID, email: user.email, isAdmin: user.admin === 1 },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
         console.log('JWT generated:', token);
 
-        res.json({ success: true, message: 'Login successful', token });
+        res.status(200).json({ success: true, message: 'Login bem-sucedido!', token });
     } catch (error) {
         console.error('Error during login process:', error);
-        res.json({ success: false, message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Erro interno do servidor' });
     }
 });
+
 
 module.exports = router;
