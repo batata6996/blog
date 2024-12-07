@@ -4,10 +4,18 @@ const { createNewPost, getUserPosts } = require('../controllers/posts');
 
 const router = express.Router();
 
-// Rota para criar um post
 router.post('/', createNewPost);
 
-// Rota para buscar posts de um usuário (opcional)
 router.get('/:userID', getUserPosts);
+
+router.get('/', async (req, res) => {
+    try {
+        const posts = await getAllPosts(); 
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error('Erro ao buscar posts:', error);
+        res.status(500).json({ error: 'Erro interno ao buscar os posts.' });
+    }
+});
 
 module.exports = router;

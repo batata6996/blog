@@ -261,10 +261,26 @@
   </footer>
 
   <script>
+
+      function parseJwt(token) {
+          try {
+            return JSON.parse(atob(token.split('.')[1]));
+          } catch (e) {
+            console.error('Erro ao decodificar JWT:', e);
+            return null;
+          }
+        }
+
     document.getElementById('postForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const userID = 1; 
+        const token = localStorage.getItem('authToken');
+        const decodedToken = parseJwt(token);
+        if (!decodedToken || !decodedToken.id) {
+          alert('Erro ao decodificar o token ou userID ausente.');
+          return;
+        }
+        const userID = decodedToken.id;
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
 
@@ -278,7 +294,7 @@
             const data = await response.json();
             if (response.ok) {
                 alert('Post criado com sucesso!');
-                window.location.href = 'index.html';
+                window.location.href = 'dashboard.html';
             } else {
                 alert(data.error || 'Erro ao criar o post.');
             }
