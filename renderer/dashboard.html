@@ -321,19 +321,37 @@
     document.addEventListener('DOMContentLoaded', function () {
       const loginButton = document.getElementById('login-button');
       const logoutButton = document.getElementById('logout-button');
+      const adminButton = document.getElementById('admin-button'); 
       const modal = document.getElementById('login-modal');
+
+      function parseJwt(token) {
+        try {
+          return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+          console.error('Erro ao decodificar JWT:', e);
+          return null;
+        }
+      }
+
   
       function checkLoginStatus() {
         const authToken = localStorage.getItem('authToken');
         if (authToken) {
-          loginButton.style.display = 'none'; 
-          logoutButton.style.display = 'inline'; 
+          const decodedToken = parseJwt(authToken);
+          if (decodedToken && decodedToken.isAdmin) {
+            adminButton.style.display = 'inline'; // Mostra o botão admin
+          } else {
+            adminButton.style.display = 'none'; // Oculta o botão admin se não for isAdmin
+          }
+          loginButton.style.display = 'none';
+          logoutButton.style.display = 'inline';
         } else {
-          loginButton.style.display = 'inline'; 
-          logoutButton.style.display = 'none'; 
+          adminButton.style.display = 'none'; // Oculta o botão admin
+          loginButton.style.display = 'inline';
+          logoutButton.style.display = 'none';
         }
       }
-  
+
 
       loginButton.addEventListener('click', function (event) {
         event.preventDefault();
