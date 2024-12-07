@@ -148,7 +148,7 @@
 
     .sidebar-right {
       right: 0;
-      width: 16.5%;
+      width: 18%;
     }
 
     .sidebar ul {
@@ -299,15 +299,7 @@
 
     <aside class="sidebar sidebar-right">
       <h3>Sobre o Blog</h3>
-      <p>Bem-vindo ao programação paralela! Aqui, nosso foco é descomplicar a programação paralela e ajudar você a aproveitar ao máximo o poder da computação moderna.
-
-        Vivemos em uma era onde os processadores têm múltiplos núcleos, mas muitos desenvolvedores ainda enfrentam desafios para explorar essa capacidade. Nosso objetivo é ensinar conceitos, compartilhar boas práticas e apresentar ferramentas que tornam o desenvolvimento paralelo mais acessível e eficiente.
-        
-        Se você é iniciante ou um desenvolvedor experiente buscando aprimorar suas habilidades, encontrará aqui tutoriais práticos, artigos técnicos, discussões sobre frameworks populares e estudos de caso do mundo real.
-        
-        Junte-se a nós para desvendar as complexidades da programação paralela e dominar técnicas que aceleram aplicações e criam soluções de alto desempenho.
-        
-        Vamos codar juntos - de forma paralela!
+      <p>A programação paralela e distribuída tem sido uma das grandes revoluções no mundo da tecnologia. Ao longo dos anos, ela transformou a maneira como lidamos com problemas complexos e melhorou significativamente o desempenho dos sistemas. Mas você já parou para pensar como essas tecnologias evoluíram e como são aplicadas no nosso dia a dia? Desde os primeiros computadores, que podiam realizar uma tarefa de cada vez, até as poderosas máquinas modernas, capazes de dividir grandes problemas e resolvê-los simultaneamente, a programação paralela e distribuída tornou-se essencial para explorar o máximo de capacidade de processamento. Neste blog, vamos explorar os marcos históricos, os principais avanços tecnológicos e as inovações que moldaram essa área da computação, além de seu impacto na engenharia de software e na vida cotidiana. Prepare-se para uma jornada fascinante pela evolução da programação que permite fazer mais, em menos tempo!
         
         </p>
     </aside>
@@ -322,6 +314,7 @@
       const loginButton = document.getElementById('login-button');
       const logoutButton = document.getElementById('logout-button');
       const adminButton = document.getElementById('admin-button'); 
+      const feed = document.querySelector('.feed');
       const modal = document.getElementById('login-modal');
 
       function parseJwt(token) {
@@ -333,6 +326,31 @@
         }
       }
 
+      async function fetchPosts() {
+        try {
+            const response = await fetch('http://localhost:3000/api/posts'); 
+            if (!response.ok) {
+                throw new Error('Erro ao buscar posts');
+            }
+            const posts = await response.json();
+            renderPosts(posts);
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+      }
+
+      function renderPosts(posts) {
+        feed.innerHTML = ''; // Limpa o feed antes de renderizar
+        posts.forEach(post => {
+            const postElement = document.createElement('article');
+            postElement.className = 'post';
+            postElement.innerHTML = `
+                <h2>${post.Title}</h2>
+                <p>${post.Content.substring(0, 150)} <a href="#">Leia mais...</a></p>
+            `;
+            feed.appendChild(postElement);
+        });
+      }
   
       function checkLoginStatus() {
         const authToken = localStorage.getItem('authToken');
@@ -376,7 +394,8 @@
         localStorage.removeItem('authToken'); 
         checkLoginStatus(); 
       });
-  
+      
+      fetchPosts(); 
       checkLoginStatus();
     });
   </script>

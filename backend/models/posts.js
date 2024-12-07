@@ -12,10 +12,10 @@ const getPostsByUser = async (userID) => {
     return rows;
 };
 
-const getAllPosts = async () => {
+const fetchAllPosts = async () => {
     const query = 'SELECT * FROM Posts ORDER BY CreatedAt DESC';
     const [rows] = await db.execute(query);
     return rows;
 };
 
-module.exports = { createPost, getPostsByUser, getAllPosts };
+module.exports = { createPost, getPostsByUser, fetchAllPosts  };

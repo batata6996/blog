@@ -118,11 +118,8 @@
 
             console.log('Registro bem-sucedido:', registerData);
 
-            // Login automático usando a função reutilizável
             await authenticateUser(email, password);
 
-            // Redirecionar ou realizar outra ação após o login automático
-            window.location.href = '/home.html';
           } catch (error) {
             console.error('Erro no registro:', error.message);
           }
