@@ -25,13 +25,16 @@ const getPostByID = async (postID) => {
             Posts.Title, 
             Posts.Content, 
             Posts.CreatedAt, 
+            Posts.UserID,
             Users.Name AS Author 
         FROM Posts 
         JOIN Users ON Posts.UserID = Users.UserID 
         WHERE Posts.PostID = ?
     `;
     const [rows] = await db.execute(query, [postID]);
-    return rows[0]; // Retorna apenas o primeiro resultado, pois o ID é único
+    console.log(rows);
+
+    return rows;
 };
 
 

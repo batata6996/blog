@@ -325,38 +325,40 @@
       const urlParams = new URLSearchParams(window.location.search);
       const postId = urlParams.get('id');
 
-      console.log("ID do post:", postId);
-
       if (!postId) {
         document.querySelector('main').innerHTML = '<p>Post não encontrado.</p>';
         return;
       }
 
       try {
-        // Faz a requisição ao backend para obter os detalhes do post
         const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
-        console.log("Resposta da API:", response); // Mostra o objeto Response
-        if (!response.ok) {
-          throw new Error('Erro ao buscar o post');
-        }
-        const post = await response.json();
-        console.log("Dados do post:", post); // Mostra os dados recebidos
-
-        if (!post || Object.keys(post).length === 0) {
+        if (!response.ok) throw new Error('Erro ao buscar o post');
+        
+        const post = (await response.json())[0]; // Ajustado para acessar o primeiro item do array
+        if (!post) {
           document.querySelector('main').innerHTML = '<p>Post não encontrado.</p>';
           return;
         }
 
-        document.querySelector('h1').textContent = post.Title;
-        document.querySelector('.metadata').innerHTML = `Publicado por <strong>${post.Author}</strong> em <em>${new Date(post.CreatedAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        })}</em>`;
-        if (post.Content && typeof post.Content === 'string') {
-          document.querySelector('article').innerHTML = `<p>${post.Content.replace(/\n/g, '</p><p>')}</p>`;
-        } else {
-          document.querySelector('article').innerHTML = '<p>Conteúdo não disponível.</p>';
+        // Manipulação do DOM com validações
+        const titleElement = document.querySelector('main h1');
+        const metadataElement = document.querySelector('.metadata');
+        const articleElement = document.querySelector('article');
+
+        if (titleElement) titleElement.textContent = post.Title;
+        if (metadataElement) {
+          metadataElement.innerHTML = `Publicado por <strong>${post.Author}</strong> em <em>${new Date(post.CreatedAt).toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+          })}</em>`;
+          console.log("Resultado da consulta:", post);
+
+        }
+        if (articleElement) {
+          articleElement.innerHTML = post.Content 
+            ? `<p>${post.Content.replace(/\n/g, '</p><p>')}</p>` 
+            : '<p>Conteúdo não disponível.</p>';
         }
 
       } catch (error) {
@@ -364,6 +366,7 @@
         document.querySelector('main').innerHTML = '<p>Erro ao carregar o post.</p>';
       }
     });
+
   </script>
 </body>
 </html>
