@@ -40,5 +40,22 @@ const getAllPosts = async (req, res) => {
     }
 };
 
-module.exports = { createNewPost, getUserPosts, getAllPosts };
+const getPostDetails = async (req, res) => {
+    const { PostID } = req.params;
+
+    try {
+        const post = await getPostByID(PostID);
+
+        if (!post) {
+            return res.status(404).json({ error: 'Post não encontrado.' });
+        }
+
+        res.status(200).json(post);
+    } catch (error) {
+        console.error('Erro ao buscar o post:', error);
+        res.status(500).json({ error: 'Erro interno ao buscar o post.' });
+    }
+};
+
+module.exports = { createNewPost, getUserPosts, getAllPosts, getPostDetails };
 

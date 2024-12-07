@@ -247,6 +247,12 @@
     border-radius: 12px;
     position: relative;
   }
+
+  .post-meta {
+    font-size: 0.9rem;
+    color: #657786;
+    margin-bottom: 10px;
+  }
   </style>
 </head>
 <body>
@@ -283,16 +289,8 @@
     <main>
       <section class="feed">
         <article class="post">
-          <h2>Título do Post 1</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit <a href="#">Leia mais...</a></p>
-        </article>
-        <article class="post">
-          <h2>Título do Post 2</h2>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. <a href="#">Leia mais...</a></p>
-        </article>
-        <article class="post">
-          <h2>Título do Post 3</h2>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. <a href="#">Leia mais...</a></p>
+          <h2>carregando</h2>
+          <p>carregando <a href="#">Leia mais...</a></p>
         </article>
       </section>
     </main>
@@ -342,11 +340,18 @@
       function renderPosts(posts) {
         feed.innerHTML = ''; // Limpa o feed antes de renderizar
         posts.forEach(post => {
+              const postDate = new Date(post.CreatedAt).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
             const postElement = document.createElement('article');
             postElement.className = 'post';
             postElement.innerHTML = `
                 <h2>${post.Title}</h2>
-                <p>${post.Content.substring(0, 150)} <a href="#">Leia mais...</a></p>
+                <p>${post.Content.substring(0, 150)} <a href="leitor.html?id=${post.PostID}">Leia mais...</a></p>
+                <p class="post-meta">Por <strong>${post.Author}</strong> em ${postDate}</p>
+
             `;
             feed.appendChild(postElement);
         });
