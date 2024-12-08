@@ -467,7 +467,7 @@
           if (response.ok) {
             likeCount = result.likeCount; // Atualiza a contagem de curtidas
             document.getElementById('likeButton').classList.toggle('liked', result.liked);
-            document.getElementById('likeCount').textContent = likeCount;
+            document.getElementById('likeCount').textContent = result.likeCount;
           } else {
             console.error('Erro ao atualizar curtidas:', result.error);
           }
