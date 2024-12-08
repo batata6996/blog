@@ -19,6 +19,7 @@
       color: #0f1419;
       min-height: 100vh;
       position: relative;
+      padding-bottom: 55px;
     }
 
     header {
@@ -279,10 +280,7 @@
     <aside class="sidebar">
       <h3>Menu</h3>
       <ul>
-        <li><a href="#">Início</a></li>
-        <li><a href="#">Explorar</a></li>
-        <li><a href="#">Inscrições</a></li>
-        <li><a href="#">Biblioteca</a></li>
+        <li><a href="#">implementar no futuro</a></li>
       </ul>
     </aside>
 
@@ -301,13 +299,13 @@
       <!-- Seção de Comentários -->
       <section class="comments">
         <h2>Comentários</h2>
-        <ul id="commentList">
-          <!-- Comentários dinâmicos aparecem aqui -->
-        </ul>
         <form id="commentForm" onsubmit="addComment(event)">
           <textarea id="commentInput" placeholder="Deixe seu comentário" required></textarea>
           <button type="submit">Enviar</button>
         </form>
+        <ul id="commentList">
+          <!-- Comentários dinâmicos aparecem aqui -->
+        </ul>
       </section>
     </main>
   </div>
@@ -381,16 +379,82 @@
       checkLoginStatus();
     });
 
-    function addComment(event) {
+    async function addComment(event) {
       event.preventDefault();
       const commentInput = document.getElementById('commentInput');
       const commentList = document.getElementById('commentList');
 
-      if (commentInput.value.trim() !== '') {
-        const newComment = document.createElement('li');
-        newComment.textContent = commentInput.value;
-        commentList.appendChild(newComment);
+      if (commentInput.value.trim() === '') return;
+
+      try {
+        // Obtendo o token do localStorage
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+          console.error('Usuário não autenticado.');
+          return;
+        }
+
+        const decodedToken = JSON.parse(atob(authToken.split('.')[1]));
+        const userID = decodedToken.id;
+
+        const response = await fetch('http://localhost:3000/api/comments', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            PostID: postId,
+            userID,
+            content: commentInput.value.trim(),
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          console.error('Erro ao adicionar comentário:', error.error);
+          return;
+        }
+
+        const newComment = await response.json();
+
+        // Adicionar o novo comentário à lista sem recarregar
+        const commentElement = document.createElement('li');
+        commentElement.textContent = `${decodedToken.name}: ${commentInput.value}`;
+        commentList.appendChild(commentElement);
+
         commentInput.value = '';
+      } catch (error) {
+        console.error(PostID, userID, content)
+        console.error('Erro ao adicionar comentário:', error);
+      }
+    }
+
+    async function loadComments() {
+      
+      try {
+            if (!postId) {
+              console.error('PostID não está definido.');
+              return;
+            }
+
+
+        const response = await fetch(`http://localhost:3000/api/comments/${postId}`);
+        console.log('URL da requisição:', `http://localhost:3000/api/comments/${postId}`);
+        if (!response.ok) {
+          console.error('Erro ao carregar comentários:', response.statusText);
+          return;
+        }
+
+        const comments = await response.json();
+        const commentList = document.getElementById('commentList');
+
+        comments.forEach((comment) => {
+          const commentElement = document.createElement('li');
+          commentElement.textContent = `${comment.userName}: ${comment.Content}`;
+          commentList.appendChild(commentElement);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar comentários:', error);
       }
     }
 
@@ -475,6 +539,9 @@
           console.error('Erro ao atualizar curtidas:', error);
         }
       }
+
+      document.addEventListener('DOMContentLoaded', loadComments);
+
   </script>
 </body>
 </html>

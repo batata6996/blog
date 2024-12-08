@@ -6,7 +6,7 @@ async function createComment(postID, userID, content) {
   return result;
 }
 
-async function getCommentsByPost(postID) {
+async function getCommentsByPost(postId) {
   const sql = `
     SELECT c.Content, c.CreatedAt, u.name AS userName 
     FROM Comments c
@@ -14,7 +14,7 @@ async function getCommentsByPost(postID) {
     WHERE c.PostID = ?
     ORDER BY c.CreatedAt DESC
   `;
-  const [rows] = await db.execute(sql, [postID]);
+  const [rows] = await db.execute(sql, [postId]);
   return rows;
 }
 
