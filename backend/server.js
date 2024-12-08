@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { registerUser, loginUser } = require('./controllers/users');
 const postRoutes = require('./routes/posts');
+const commentsRoutes = require('./routes/comments');
+const likesRoutes = require('./routes/likes');
 require('dotenv').config();
 
 const app = express(); 
@@ -26,6 +28,8 @@ app.use('/api/users', userRoutes);
 app.post('/api/users/register', registerUser); 
 app.post('/api/users/login', loginUser);
 app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentsRoutes);
+app.use('/api/likes', likesRoutes);
 
 const PORT = 3000;
 app.listen(PORT, () => {

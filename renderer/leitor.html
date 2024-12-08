@@ -318,6 +318,7 @@
 
   <script>
     let likeCount = 0;
+    let postId;
 
     document.addEventListener('DOMContentLoaded', function () {
       const loginButton = document.getElementById('login-button');
@@ -380,23 +381,6 @@
       checkLoginStatus();
     });
 
-    function toggleLike() {
-      const likeButton = document.getElementById('likeButton');
-      const likeCountSpan = document.getElementById('likeCount');
-
-      if (likeButton.classList.contains('liked')) {
-        likeCount--;
-        likeButton.classList.remove('liked');
-        likeButton.textContent = `❤️ Curtir (${likeCount})`;
-      } else {
-        likeCount++;
-        likeButton.classList.add('liked');
-        likeButton.textContent = `💔 Descurtir (${likeCount})`;
-      }
-
-      likeCountSpan.textContent = likeCount;
-    }
-
     function addComment(event) {
       event.preventDefault();
       const commentInput = document.getElementById('commentInput');
@@ -411,51 +395,86 @@
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const postId = urlParams.get('id');
+        const urlParams = new URLSearchParams(window.location.search);
+        postId = urlParams.get('id');
 
-      if (!postId) {
-        document.querySelector('main').innerHTML = '<p>Post não encontrado.</p>';
-        return;
-      }
-
-      try {
-        const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
-        if (!response.ok) throw new Error('Erro ao buscar o post');
-        
-        const post = (await response.json())[0]; // Ajustado para acessar o primeiro item do array
-        if (!post) {
+        if (!postId) {
           document.querySelector('main').innerHTML = '<p>Post não encontrado.</p>';
           return;
         }
 
-        // Manipulação do DOM com validações
-        const titleElement = document.querySelector('main h1');
-        const metadataElement = document.querySelector('.metadata');
-        const articleElement = document.querySelector('article');
+        try {
+          const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
+          if (!response.ok) throw new Error('Erro ao buscar o post');
+          
+          const post = (await response.json())[0]; // Pega o primeiro item do array
+          if (!post) {
+            document.querySelector('main').innerHTML = '<p>Post não encontrado.</p>';
+            return;
+          }
 
-        if (titleElement) titleElement.textContent = post.Title;
-        if (metadataElement) {
-          metadataElement.innerHTML = `Publicado por <strong>${post.Author}</strong> em <em>${new Date(post.CreatedAt).toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-          })}</em>`;
-          console.log("Resultado da consulta:", post);
+          // Atualiza os elementos do DOM com os dados do post
+          const titleElement = document.querySelector('main h1');
+          const metadataElement = document.querySelector('.metadata');
+          const articleElement = document.querySelector('article');
+          const likeCountSpan = document.getElementById('likeCount');
 
+          if (titleElement) titleElement.textContent = post.Title;
+          if (metadataElement) {
+            metadataElement.innerHTML = `Publicado por <strong>${post.Author}</strong> em <em>${new Date(post.CreatedAt).toLocaleDateString('pt-BR', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            })}</em>`;
+          }
+          if (articleElement) {
+            articleElement.innerHTML = post.Content 
+              ? `<p>${post.Content.replace(/\n/g, '</p><p>')}</p>` 
+              : '<p>Conteúdo não disponível.</p>';
+          }
+          if (likeCountSpan) {
+            likeCountSpan.textContent = post.likeCount || 0; // Atualiza a contagem de curtidas
+            likeCount = post.likeCount || 0; // Salva o valor atual de curtidas
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          document.querySelector('main').innerHTML = '<p>Erro ao carregar o post.</p>';
         }
-        if (articleElement) {
-          articleElement.innerHTML = post.Content 
-            ? `<p>${post.Content.replace(/\n/g, '</p><p>')}</p>` 
-            : '<p>Conteúdo não disponível.</p>';
-        }
+      });
 
-      } catch (error) {
-        console.error('Erro:', error);
-        document.querySelector('main').innerHTML = '<p>Erro ao carregar o post.</p>';
+      async function toggleLike() {
+        try {
+          // Obtendo o token do localStorage
+          const authToken = localStorage.getItem('authToken');
+          if (!authToken) {
+            console.error('Usuário não autenticado.');
+            return;
+          }
+
+          const decodedToken = JSON.parse(atob(authToken.split('.')[1]));
+          const UserID = decodedToken.id; 
+
+          const response = await fetch(`http://localhost:3000/api/likes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              PostID: postId,
+              UserID,
+            }),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            likeCount = result.likeCount; // Atualiza a contagem de curtidas
+            document.getElementById('likeButton').classList.toggle('liked', result.liked);
+            document.getElementById('likeCount').textContent = likeCount;
+          } else {
+            console.error('Erro ao atualizar curtidas:', result.error);
+          }
+        } catch (error) {
+          console.error('Erro ao atualizar curtidas:', error);
+        }
       }
-    });
-
   </script>
 </body>
 </html>

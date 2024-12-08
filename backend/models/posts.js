@@ -26,13 +26,13 @@ const getPostByID = async (postID) => {
             Posts.Content, 
             Posts.CreatedAt, 
             Posts.UserID,
+            Posts.likeCount, 
             Users.Name AS Author 
         FROM Posts 
         JOIN Users ON Posts.UserID = Users.UserID 
         WHERE Posts.PostID = ?
     `;
     const [rows] = await db.execute(query, [postID]);
-    console.log(rows);
 
     return rows;
 };
