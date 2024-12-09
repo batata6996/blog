@@ -1,7 +1,7 @@
 const db = require('../db');
 
 const createPost = async (userID, title, content) => {
-    const query = 'INSERT INTO Posts (UserID, Title, Content) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO Posts (UserID, Title, Content, likeCount) VALUES (?, ?, ?, 0)';
     const [result] = await db.execute(query, [userID, title, content]);
     return result;
 };
