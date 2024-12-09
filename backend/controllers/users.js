@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const db = require('../db'); // Importa o pool prometido
+const db = require('../db'); 
 const jwt = require('jsonwebtoken');
 
 const registerUser = async (req, res) => {

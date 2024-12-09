@@ -1,7 +1,5 @@
-// backend/controllers/posts.js
 const { createPost, getPostsByUser, fetchAllPosts, getPostByID } = require('../models/posts');
 
-// Cria um novo post
 const createNewPost = async (req, res) => {
     const { userID, title, content } = req.body;
 

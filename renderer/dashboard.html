@@ -6,7 +6,6 @@
   <meta name="description" content="Um blog interativo para compartilhar ideias e experiências.">
   <title>Página Principal | Meu Blog</title>
   <style>
-    /* Reset básico */
     * {
       margin: 0;
       padding: 0;
@@ -25,7 +24,7 @@
       display: flex;
       position: relative;
       width: 100%;
-      height: calc(100vh - 60px); /* Subtrai o tamanho do header */
+      height: calc(100vh - 60px); 
     }
 
     header {
@@ -39,7 +38,7 @@
       z-index: 1000;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       display: flex;
-      align-items: center; /* Alinha itens verticalmente */
+      align-items: center; 
     }
 
     header h1 {
@@ -77,9 +76,9 @@
     main {
       position: absolute;
       left: 20%;
-      width: 60%; /* Ajustado para caber entre as duas sidebars */
-      top: 80px; /* Espaço abaixo do header */
-      height: calc(100% - 100px); /* Altura ajustada ao footer */
+      width: 60%; 
+      top: 80px; 
+      height: calc(100% - 100px); 
       overflow-y: auto;
     }
 
@@ -196,13 +195,12 @@
     }
 
     .logo {
-      height: 50px; /* Ajuste conforme necessário */
-      width: auto; /* Mantém proporção da imagem */
-      margin-right: 10px; /* Espaço entre a logo e o título */
-      vertical-align: middle; /* Alinha com o texto ao lado */
+      height: 50px; 
+      width: auto; 
+      margin-right: 10px; 
+      vertical-align: middle;
     }
 
-    /* Responsividade */
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
@@ -335,7 +333,7 @@
       }
 
       function renderPosts(posts) {
-        feed.innerHTML = ''; // Limpa o feed antes de renderizar
+        feed.innerHTML = ''; 
         posts.forEach(post => {
               const postDate = new Date(post.CreatedAt).toLocaleDateString('pt-BR', {
                 day: '2-digit',
@@ -359,14 +357,14 @@
         if (authToken) {
           const decodedToken = parseJwt(authToken);
           if (decodedToken && decodedToken.isAdmin) {
-            adminButton.style.display = 'inline'; // Mostra o botão admin
+            adminButton.style.display = 'inline';
           } else {
-            adminButton.style.display = 'none'; // Oculta o botão admin se não for isAdmin
+            adminButton.style.display = 'none'; 
           }
           loginButton.style.display = 'none';
           logoutButton.style.display = 'inline';
         } else {
-          adminButton.style.display = 'none'; // Oculta o botão admin
+          adminButton.style.display = 'none'; 
           loginButton.style.display = 'inline';
           logoutButton.style.display = 'none';
         }

@@ -6,7 +6,6 @@
   <meta name="description" content="Leitura detalhada de um post.">
   <title>Leitura de Post | Meu Blog</title>
   <style>
-    /* Reset básico */
     * {
       margin: 0;
       padding: 0;
@@ -77,7 +76,7 @@
 
     .container {
       display: flex;
-      margin-top: 80px; /* Espaço para o header */
+      margin-top: 80px; 
     }
 
     aside.sidebar {
@@ -85,7 +84,7 @@
       top: 60px;
       left: 0;
       width: 13%;
-      height: calc(100vh - 60px); /* Altura ajustada ao header */
+      height: calc(100vh - 60px);
       background: #ffffff;
       border-radius: 12px;
       border: 1px solid #e1e8ed;
@@ -293,10 +292,8 @@
         <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       </article>
 
-      <!-- Botão Curtir -->
       <button id="likeButton" onclick="toggleLike()">❤️ Curtir (<span id="likeCount">0</span>)</button>
 
-      <!-- Seção de Comentários -->
       <section class="comments">
         <h2>Comentários</h2>
         <form id="commentForm" onsubmit="addComment(event)">
@@ -304,7 +301,6 @@
           <button type="submit">Enviar</button>
         </form>
         <ul id="commentList">
-          <!-- Comentários dinâmicos aparecem aqui -->
         </ul>
       </section>
     </main>
@@ -338,14 +334,14 @@
         if (authToken) {
           const decodedToken = parseJwt(authToken);
           if (decodedToken && decodedToken.isAdmin) {
-            adminButton.style.display = 'inline'; // Mostra o botão admin
+            adminButton.style.display = 'inline'; 
           } else {
-            adminButton.style.display = 'none'; // Oculta o botão admin se não for isAdmin
+            adminButton.style.display = 'none'; 
           }
           loginButton.style.display = 'none';
           logoutButton.style.display = 'inline';
         } else {
-          adminButton.style.display = 'none'; // Oculta o botão admin
+          adminButton.style.display = 'none'; 
           loginButton.style.display = 'inline';
           logoutButton.style.display = 'none';
         }
@@ -387,7 +383,6 @@
       if (commentInput.value.trim() === '') return;
 
       try {
-        // Obtendo o token do localStorage
         const authToken = localStorage.getItem('authToken');
         if (!authToken) {
           console.error('Usuário não autenticado.');
@@ -417,7 +412,6 @@
 
         const newComment = await response.json();
 
-        // Adicionar o novo comentário à lista sem recarregar
         const commentElement = document.createElement('li');
         commentElement.textContent = `${decodedToken.name}: ${commentInput.value}`;
         commentList.appendChild(commentElement);
@@ -471,13 +465,12 @@
           const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
           if (!response.ok) throw new Error('Erro ao buscar o post');
           
-          const post = (await response.json())[0]; // Pega o primeiro item do array
+          const post = (await response.json())[0]; 
           if (!post) {
             document.querySelector('main').innerHTML = '<p>Post não encontrado.</p>';
             return;
           }
 
-          // Atualiza os elementos do DOM com os dados do post
           const titleElement = document.querySelector('main h1');
           const metadataElement = document.querySelector('.metadata');
           const articleElement = document.querySelector('article');
@@ -497,8 +490,8 @@
               : '<p>Conteúdo não disponível.</p>';
           }
           if (likeCountSpan) {
-            likeCountSpan.textContent = post.likeCount || 0; // Atualiza a contagem de curtidas
-            likeCount = post.likeCount || 0; // Salva o valor atual de curtidas
+            likeCountSpan.textContent = post.likeCount || 0; 
+            likeCount = post.likeCount || 0; 
           }
         } catch (error) {
           console.error('Erro:', error);
@@ -508,7 +501,6 @@
 
       async function toggleLike() {
         try {
-          // Obtendo o token do localStorage
           const authToken = localStorage.getItem('authToken');
           if (!authToken) {
             console.error('Usuário não autenticado.');
@@ -529,7 +521,7 @@
 
           const result = await response.json();
           if (response.ok) {
-            likeCount = result.likeCount; // Atualiza a contagem de curtidas
+            likeCount = result.likeCount; 
             document.getElementById('likeButton').classList.toggle('liked', result.liked);
             document.getElementById('likeCount').textContent = result.likeCount;
           } else {

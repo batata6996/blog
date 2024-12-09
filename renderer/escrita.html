@@ -6,7 +6,6 @@
   <meta name="description" content="Tela de escrita de um post.">
   <title>Escrever Post | Meu Blog</title>
   <style>
-    /* Reset básico */
     * {
       margin: 0;
       padding: 0;
@@ -76,7 +75,7 @@
 
     .container {
       display: flex;
-      margin-top: 80px; /* Espaço para o header */
+      margin-top: 80px; 
     }
 
     aside.sidebar {
@@ -84,7 +83,7 @@
       top: 60px;
       left: 0;
       width: 13%;
-      height: calc(100vh - 60px); /* Altura ajustada ao header */
+      height: calc(100vh - 60px); 
       background: #ffffff;
       border-radius: 12px;
       border: 1px solid #e1e8ed;
@@ -225,7 +224,6 @@
       width: 100%;
     }
 
-    /* Responsividade */
     @media (max-width: 768px) {
       aside.sidebar {
         position: static;
@@ -305,13 +303,13 @@
             if (authToken) {
               const decodedToken = parseJwt(authToken);
               if (decodedToken && decodedToken.isAdmin) {
-                adminButton.style.display = 'inline'; // Mostra o botão admin
+                adminButton.style.display = 'inline'; 
               } else {
-                adminButton.style.display = 'none'; // Oculta o botão admin se não for isAdmin
+                adminButton.style.display = 'none';
               }
               loginButton.style.display = 'none';
             } else {
-              adminButton.style.display = 'none'; // Oculta o botão admin
+              adminButton.style.display = 'none';
               loginButton.style.display = 'inline';
             }
           }

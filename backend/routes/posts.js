@@ -1,4 +1,3 @@
-// backend/routes/posts.js
 const express = require('express');
 const { createNewPost, getUserPosts, getAllPosts, getPostDetails } = require('../controllers/posts');
 
